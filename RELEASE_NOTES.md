@@ -69,7 +69,7 @@ python process_images.py *.jpg -o processed/
 ## 🛠️ 기술적 세부사항
 
 - **언어**: Python 3.6+
-- **주요 라이브러리**: Pillow (PIL), Tkinter
+- **주요 라이브러리**: Pillow (PIL), NiceGUI
 - **빌드 도구**: PyInstaller
 - **지원 OS**: Windows 10+, macOS 10.14+, Ubuntu 18.04+
 

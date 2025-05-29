@@ -23,10 +23,10 @@
 python process_images_gui.py
 ```
 
-1. **이미지 선택** 버튼을 클릭하여 처리할 이미지들을 선택
-2. **출력 폴더 선택** 버튼을 클릭하여 결과를 저장할 폴더 지정 (선택사항)
+1. **이미지 업로드** 영역에 처리할 이미지를 드래그하거나 선택
+2. **출력 폴더** 입력란에 결과 저장 위치 지정 (기본값: `processed`)
 3. **처리 시작** 버튼을 클릭하여 이미지 처리 실행
-4. 하단 진행률 바를 통해 처리 현황을 확인
+4. 진행률 바를 통해 처리 현황을 확인
 
 ### 명령어 버전 사용하기
 
@@ -104,7 +104,7 @@ chmod +x build_mac.sh
 ## 🛠️ 기술 스택
 
 - **[Pillow (PIL)](https://pillow.readthedocs.io/)**: 이미지 처리 및 EXIF 데이터 조작
-- **[Tkinter](https://docs.python.org/3/library/tkinter.html)**: 크로스플랫폼 GUI 개발
+- **[NiceGUI](https://nicegui.io/)**: 웹 기반 GUI 개발
 - **[PyInstaller](https://pyinstaller.org/)**: 실행 파일 생성
 
 ## 📂 프로젝트 구조

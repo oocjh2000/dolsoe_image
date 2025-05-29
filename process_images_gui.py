@@ -1,57 +1,53 @@
-import tkinter as tk
-from tkinter import filedialog, messagebox, ttk
 from pathlib import Path
+from tempfile import TemporaryDirectory
+
+from nicegui import ui
+
 from process_images import process_image
 
 
-class App(tk.Tk):
-    def __init__(self):
-        super().__init__()
-        self.title("돌쇠 이미지 처리기")
-        self.geometry("320x170")
-        self.image_paths = []
-        self.output_dir = Path("processed")
-
-        tk.Button(self, text="이미지 선택", command=self.select_images).pack(fill="x", pady=2)
-        tk.Button(self, text="출력 폴더 선택", command=self.select_output_dir).pack(fill="x", pady=2)
-        tk.Button(self, text="처리 시작", command=self.process).pack(fill="x", pady=2)
-
-        self.progress = ttk.Progressbar(self, maximum=100)
-        self.progress.pack(fill="x", pady=2)
-        self.progress_label = tk.Label(self, text="진행률: 0 / 0")
-        self.progress_label.pack(pady=2)
-
-    def select_images(self):
-        paths = filedialog.askopenfilenames(filetypes=[("Images", "*.jpg *.jpeg *.png *.bmp *.gif")])
-        if paths:
-            self.image_paths = list(paths)
-            messagebox.showinfo("선택 완료", f"{len(self.image_paths)}개 이미지 선택")
-            self.progress_label.config(text=f"진행률: 0 / {len(self.image_paths)}")
-
-    def select_output_dir(self):
-        directory = filedialog.askdirectory()
-        if directory:
-            self.output_dir = Path(directory)
-
-    def process(self):
-        if not self.image_paths:
-            messagebox.showwarning("오류", "이미지를 먼저 선택하세요")
-            return
-        self.output_dir.mkdir(parents=True, exist_ok=True)
-        total = len(self.image_paths)
-        self.progress.configure(maximum=total, value=0)
-        for idx, path in enumerate(self.image_paths, 1):
-            process_image(Path(path), self.output_dir)
-            self.progress['value'] = idx
-            self.progress_label.config(text=f"진행률: {idx} / {total}")
-            self.update_idletasks()
-        messagebox.showinfo("완료", "처리가 완료되었습니다.")
+image_files: list[ui.UploadedFile] = []
 
 
-def main():
-    app = App()
-    app.mainloop()
+def select_images(event: ui.UploadEvent) -> None:
+    """Store uploaded image files and show a notification."""
+    image_files.extend(event.files)
+    ui.notify(f"{len(image_files)}개 이미지 선택")
+    progress_label.text = f"진행률: 0 / {len(image_files)}"
 
 
-if __name__ == "__main__":
-    main()
+def start_process() -> None:
+    """Process selected images with progress feedback."""
+    if not image_files:
+        ui.notify("이미지를 먼저 선택하세요", color="negative")
+        return
+
+    out_dir = Path(output_input.value or "processed")
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    with TemporaryDirectory() as temp_dir:
+        total = len(image_files)
+        for idx, file in enumerate(image_files, 1):
+            temp_path = Path(temp_dir) / file.name
+            file.save(temp_path)
+            process_image(temp_path, out_dir)
+            progress.value = idx / total
+            progress_label.text = f"진행률: {idx} / {total}"
+
+    ui.notify("처리가 완료되었습니다.")
+    image_files.clear()
+    progress.value = 0
+    progress_label.text = "진행률: 0 / 0"
+
+
+with ui.column().classes("w-80 m-auto p-4"):
+    ui.label("돌쇠 이미지 처리기").classes("text-2xl")
+    ui.upload(on_upload=select_images, multiple=True).props("accept='image/*'")
+    output_input = ui.input(label="출력 폴더", value="processed")
+    ui.button("처리 시작", on_click=start_process)
+    progress = ui.linear_progress(value=0)
+    progress_label = ui.label("진행률: 0 / 0")
+
+
+ui.run()
+
