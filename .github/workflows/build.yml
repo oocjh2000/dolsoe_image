@@ -26,25 +26,18 @@ jobs:
               source venv/bin/activate
               pip install -r requirements.txt
               pyinstaller --onefile --name dolsoe-image-macos process_images_gui.py
-          - os: ubuntu-latest
-            artifact_name: dolsoe-image-linux
-            build_command: |
-              python -m venv venv
-              source venv/bin/activate
-              pip install -r requirements.txt
-              pyinstaller --onefile --name dolsoe-image-linux process_images_gui.py
 
     steps:
     - name: 📥 Checkout code
       uses: actions/checkout@v4
 
     - name: 🐍 Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.9'
 
     - name: 📦 Cache dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -55,7 +48,7 @@ jobs:
       run: ${{ matrix.build_command }}
 
     - name: 📤 Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.artifact_name }}
         path: |
@@ -68,22 +61,20 @@ jobs:
     
     steps:
     - name: 📥 Download all artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       
     - name: 🚀 Create Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: |
           dolsoe-image-windows.exe/*
           dolsoe-image-macos/*
-          dolsoe-image-linux/*
         body: |
           ## 🎉 새 릴리즈가 준비되었습니다!
           
           ### 📥 다운로드
           - 🪟 **Windows**: `dolsoe-image-windows.exe`
-          - 🍎 **macOS**: `dolsoe-image-macos`  
-          - 🐧 **Linux**: `dolsoe-image-linux`
+          - 🍎 **macOS**: `dolsoe-image-macos`
           
           자세한 내용은 [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)를 확인해주세요.
         draft: false
