@@ -115,9 +115,9 @@ pyinstaller==5.13.0
 #### 2. **PyInstaller 빌드 실패**
 ```bash
 # 로그에서 확인할 내용:
-ERROR: Hidden import 'PIL._tkinter_finder' not found
+ModuleNotFoundError: No module named 'nicegui'
 ```
-**해결책**: 워크플로우에 hidden imports 추가
+**해결책**: `requirements.txt`에 `nicegui`가 포함되어 있는지 확인
 
 #### 3. **권한 문제**
 ```
