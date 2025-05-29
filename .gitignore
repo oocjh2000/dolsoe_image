@@ -1,0 +1,77 @@
+# 🐍 Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 🌐 PyInstaller
+*.manifest
+*.spec
+
+# 📦 가상환경
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# 🔧 IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 📁 OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 🖼️ 테스트 이미지들
+test_images/
+processed/
+output/
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.gif
+*.tiff
+*.webp
+
+# 📝 로그
+*.log
+
+# 🔐 환경변수
+.env
+.env.local
+.env.*.local
+
+# 🧪 테스트
+.coverage
+.pytest_cache/
+.tox/
+
+# 📊 프로파일링
+.prof 
